@@ -3,28 +3,47 @@ package ui;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.Color;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.awt.*;
 
 public class ChessBoardPanel extends JPanel {
         Color whiteColor;
         Color blackColor;
-        JButton[] squares = new JButton[64];
+        ArrayList<JLabel> possibleMovesLabels = new ArrayList<>();
+        ChessFigureButton[] squares = new ChessFigureButton[64];
         Hashtable<Character, Icon> images = new Hashtable<>();
+        ActionListener listener;
 
-        public ChessBoardPanel(int size, Color whiteColor, Color blackColor) {
+        public ChessBoardPanel(int size, Color whiteColor, Color blackColor, ActionListener listener) {
                 this.whiteColor = whiteColor;
                 this.blackColor = blackColor;
+                this.listener = listener;
                 this.setLayout(new GridLayout(8, 8));
                 this.setBackground(whiteColor);
                 this.setPreferredSize(new Dimension(size, size));
                 createSquares();
                 createImageTable();
                 this.setVisible(true);
+        }
+
+        public void displayPossibleMove(int position) {
+                Point p = squares[position].getLocation();
+                JLabel possibleMove = new JLabel();
+                possibleMove.setLocation(p);
+                possibleMove.setSize(5, 5);
+                possibleMove.setVisible(true);
+                possibleMovesLabels.add(possibleMove);
+        }
+
+        public void clearPossibleMoves() {
+                possibleMovesLabels.clear();
         }
 
         public void setChessPiece(char key, int position) {
@@ -91,7 +110,9 @@ public class ChessBoardPanel extends JPanel {
                                 checkeredBit = !checkeredBit;
                         }
 
-                        JButton button = new JButton();
+                        ChessFigureButton button = new ChessFigureButton(i);
+                        button.addActionListener(listener);
+
                         // ^ is the XOR operator
                         if ((i % 2 == 0) ^ (checkeredBit)) {
                                 button.setBackground(whiteColor);

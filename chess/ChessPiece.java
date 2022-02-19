@@ -7,7 +7,7 @@ public abstract class ChessPiece {
     protected ChessBoard board;
     private ColorEnum color;
 
-    protected abstract ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException;
+    public abstract ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException;
 
     protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 

@@ -111,6 +111,10 @@ public class ChessBoard {
         return figures[position.getBoardArrayIndex()];
     }
 
+    public ChessPiece getChessPiece(int index) {
+        return figures[index];
+    }
+
     public boolean isInBounds(Position position) {
         return position.file < 8 && position.file >= 0 && position.rank < 8 && position.rank >= 0;
     }
