@@ -7,7 +7,7 @@ public class Knight extends ChessPiece{
         super(color, board);
     }
     @Override
-    public ArrayList<Position> getAllPossibleMoves() {
+    public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException {
         ArrayList<Position> result = new ArrayList<>();
 
         //clockwise order
@@ -79,17 +79,11 @@ public class Knight extends ChessPiece{
     }
 
     @Override
-    protected boolean isLegalMove(Position newPosition) {
+    protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 
-        if (!board.isInBounds(newPosition)) {
-            return false;
-        }
-
-        ChessPiece newPositionFigure = board.getChessPiece(newPosition);
-
-        if (newPositionFigure.getColor() == this.getColor()) {
-            return false;
-        }
+        if (!super.isLegalMove(newPosition)) {
+			return false;
+		}
 
         if ((Math.abs(position.rank - newPosition.rank) == 1 && Math.abs(position.file - newPosition.file) == 2) 
         || (Math.abs(position.rank - newPosition.rank) == 2 && Math.abs(position.file - newPosition.file) == 1))

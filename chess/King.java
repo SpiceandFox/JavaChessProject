@@ -75,21 +75,14 @@ public class King extends ChessPiece {
     @Override
     protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
         
-        if (!board.isInBounds(newPosition)) {
+        if (!super.isLegalMove(newPosition)) {
+			return false;
+		}
+
+        if (Math.abs(newPosition.rank - position.rank) > 1) {
             return false;
         }
-        
-        ChessPiece newPositionFigure = board.getChessPiece(newPosition);
-        
-        if (newPositionFigure.getColor() == this.getColor()) {
-            return false;
-        }
-
-        if (!board.wayIsClear(this.position, newPosition)) {
-            throw new InvalidMoveException("You can't move through pieces");
-        } 
-
-        if (isInDanger(newPosition)) {
+        if (Math.abs(newPosition.file - position.file) > 1 ) {
             return false;
         }
         

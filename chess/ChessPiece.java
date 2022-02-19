@@ -16,6 +16,11 @@ public abstract class ChessPiece {
 		{
 			return false;
 		}
+
+		if (!board.wayIsClear(position, newPosition)) {
+			return false;
+		}
+
         if (!kingIsSafe()) {
             return false;
         }

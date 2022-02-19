@@ -21,15 +21,9 @@ public class Queen extends ChessPiece{
     }
 
     @Override
-    protected boolean isLegalMove(Position newPosition) {
-      if (!board.isInBounds(newPosition)) {
-        return false;
-      }
-  
-      ChessPiece newPositionFigure = this.board.getChessPiece(newPosition);
-      
-      if (newPositionFigure.getColor() == this.getColor())
-      {
+    protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
+
+      if (!super.isLegalMove(newPosition)) {
         return false;
       }
   
