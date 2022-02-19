@@ -1,16 +1,18 @@
 package chess;
+
 import java.util.ArrayList;
 
-public class Knight extends ChessPiece{
+public class Knight extends ChessPiece {
 
-    public Knight(ColorEnum color, ChessBoard board){
+    public Knight(ColorEnum color, ChessBoard board) {
         super(color, board);
     }
+
     @Override
     public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException {
         ArrayList<Position> result = new ArrayList<>();
 
-        //clockwise order
+        // clockwise order
         Position tempPosition = new Position(this.position);
         tempPosition.file++;
         tempPosition.rank++;
@@ -18,7 +20,7 @@ public class Knight extends ChessPiece{
         if (isLegalMove(tempPosition)) {
             result.add(tempPosition);
         }
-        
+
         tempPosition = new Position(this.position);
         tempPosition.file++;
         tempPosition.file++;
@@ -32,7 +34,7 @@ public class Knight extends ChessPiece{
         tempPosition.file++;
         tempPosition.rank--;
         if (isLegalMove(tempPosition)) {
-            result.add(tempPosition);  
+            result.add(tempPosition);
         }
 
         tempPosition = new Position(this.position);
@@ -82,12 +84,12 @@ public class Knight extends ChessPiece{
     protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 
         if (!super.isLegalMove(newPosition)) {
-			return false;
-		}
+            return false;
+        }
 
-        if ((Math.abs(position.rank - newPosition.rank) == 1 && Math.abs(position.file - newPosition.file) == 2) 
-        || (Math.abs(position.rank - newPosition.rank) == 2 && Math.abs(position.file - newPosition.file) == 1))
-        {
+        if ((Math.abs(position.rank - newPosition.rank) == 1 && Math.abs(position.file - newPosition.file) == 2)
+                || (Math.abs(position.rank - newPosition.rank) == 2
+                        && Math.abs(position.file - newPosition.file) == 1)) {
             return true;
         }
         return false;
@@ -96,9 +98,9 @@ public class Knight extends ChessPiece{
     @Override
     public char getName() {
         if (this.getColor() == ColorEnum.Black) {
-			return 'n';
-		}
-		return 'N';
+            return 'n';
+        }
+        return 'N';
     }
-    
+
 }

@@ -1,4 +1,5 @@
 package chess;
+
 import java.util.ArrayList;
 
 public class King extends ChessPiece {
@@ -14,7 +15,7 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException{
+    public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException {
         ArrayList<Position> result = new ArrayList<>();
 
         Position tempPosition = new Position(this.position);
@@ -74,41 +75,40 @@ public class King extends ChessPiece {
 
     @Override
     protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
-        
+
         if (!super.isLegalMove(newPosition)) {
-			return false;
-		}
+            return false;
+        }
 
         if (Math.abs(newPosition.rank - position.rank) > 1) {
             return false;
         }
-        if (Math.abs(newPosition.file - position.file) > 1 ) {
+        if (Math.abs(newPosition.file - position.file) > 1) {
             return false;
         }
-        
+
         return true;
     }
 
     @Override
     public char getName() {
         if (this.getColor() == ColorEnum.Black) {
-			return 'k';
-		}
-		return 'K';
+            return 'k';
+        }
+        return 'K';
     }
 
     public boolean canCastle() {
         return !hasMoved;
     }
 
-    protected boolean isInDanger( Position newPosition ) throws InvalidMoveException, GameStateException{
+    protected boolean isInDanger(Position newPosition) throws InvalidMoveException, GameStateException {
         ColorEnum enemyColor;
         if (this.getColor() == ColorEnum.White) {
             enemyColor = ColorEnum.Black;
-        } 
-        else {
+        } else {
             enemyColor = ColorEnum.White;
-        } 
+        }
         ArrayList<ChessPiece> enemyFigures = this.board.getAllChessPiecesFromColor(enemyColor);
 
         for (ChessPiece figure : enemyFigures) {
@@ -119,5 +119,5 @@ public class King extends ChessPiece {
 
         return false;
     }
-    
+
 }

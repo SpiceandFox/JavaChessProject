@@ -1,21 +1,22 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import chess.ChessBoard;
 import chess.ChessPiece;
+import chess.GameStateException;
+import chess.InvalidMoveException;
 import chess.Position;
 
 public class GUI implements IUserInterface {
     private JFrame mainFrame = new JFrame();
     private ChessBoardPanel chessPanel;
     private ChessBoard board;
+    private ActionListener chessPieceListener;
 
     public GUI() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,11 +26,33 @@ public class GUI implements IUserInterface {
         mainFrame.getContentPane().setBackground(Color.RED);
         mainFrame.setLayout(null);
 
-        chessPanel = new ChessBoardPanel(400, Color.WHITE, Color.BLACK);
+        initListener();
+        chessPanel = new ChessBoardPanel(400, Color.WHITE, Color.BLACK, chessPieceListener);
         chessPanel.setBounds(10, 10, 410, 410);
         mainFrame.add(chessPanel);
-
         mainFrame.setVisible(true);
+    }
+
+    private void displayPossibleMoves(ChessPiece piece) throws InvalidMoveException, GameStateException {
+        chessPanel.clearPossibleMoves();
+        ArrayList<Position> moves = piece.getAllPossibleMoves();
+        for (Position move : moves) {
+            chessPanel.displayPossibleMove(move.getBoardArrayIndex());
+        }
+
+    }
+
+    private void initListener() {
+        this.chessPieceListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int index = ((ChessFigureButton) e.getSource()).getPosition();
+                try {
+                    displayPossibleMoves(board.getChessPiece(index));
+                } catch (Exception exception) {
+                    displayMessage(exception.getMessage());
+                }
+            }
+        };
     }
 
     private ChessPiece[] reverseArray(ChessPiece[] array) {
@@ -52,7 +75,7 @@ public class GUI implements IUserInterface {
 
     @Override
     public void displayMessage(String message) {
-        // TODO Auto-generated method stub
+        System.out.println(message);
 
     }
 
