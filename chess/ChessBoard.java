@@ -1,7 +1,6 @@
 package chess;
 import java.util.ArrayList;
 import java.util.List;
-
 public class ChessBoard {
 
     //#region Attributes
@@ -28,8 +27,12 @@ public class ChessBoard {
 
         String[] fenFields = boardString.split(" ");
 
+        //reverse string
+        StringBuilder sb = new StringBuilder(fenFields[0]);
+        fenFields[0] = sb.reverse().toString();
+        
         char[] figureChars = fenFields[0].toCharArray();
-
+        
         //create all chesspieces
         for (char c : figureChars) {
             tempFigures = getNewChessPieceFromChar(c);
@@ -70,7 +73,7 @@ public class ChessBoard {
     //#region Public Methods
 
     public String getFenString() {
-        return "";
+        return "asdf";
     }
 
     public ColorEnum getCurrentPlayer(){
@@ -223,6 +226,10 @@ public class ChessBoard {
     public boolean wayIsClear( Position pos1, Position pos2 ){
         int directionFile = 0;
         int directionRank = 0;
+
+        if (figures[pos1.getBoardArrayIndex()] instanceof Knight) {
+            return true;
+        }
         
         if (pos1.rank != pos2.rank) {
             if (pos1.rank < pos2.rank) {
@@ -256,7 +263,7 @@ public class ChessBoard {
         return true;
     }
 
-    public void moveChessPiece(Position from, Position to) throws Exception{
+    public void moveChessPiece(Position from, Position to) throws InvalidMoveException, GameStateException, WinException {
         ChessPiece figure = this.getChessPiece(from);
         if (figure.getColor() == ColorEnum.Empty) {
             throw new InvalidMoveException("You didn't select a playing piece");
@@ -264,6 +271,11 @@ public class ChessBoard {
         if (figure.getColor() != this.colorToPlay) {
             throw new InvalidMoveException("You selected the wrong colored playing piece");
         } 
+
+        if (!wayIsClear(from, to)) {
+            throw new InvalidMoveException("You can't move through pieces");
+        }
+        
         if (figure.isLegalMove(to)) {
             figures[to.getBoardArrayIndex()] = figure;
             figures[from.getBoardArrayIndex()] = new NullChessPiece(this);
@@ -275,7 +287,7 @@ public class ChessBoard {
         }
     }
 
-    private void finishTurn(ChessPiece figure) throws WinException, Exception {
+    private void finishTurn(ChessPiece figure) throws WinException, InvalidMoveException, GameStateException {
         if (colorToPlay == ColorEnum.White) {
             colorToPlay = ColorEnum.Black;
         }

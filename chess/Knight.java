@@ -90,7 +90,13 @@ public class Knight extends ChessPiece{
         if (newPositionFigure.getColor() == this.getColor()) {
             return false;
         }
-        return true;
+
+        if ((Math.abs(position.rank - newPosition.rank) == 1 && Math.abs(position.file - newPosition.file) == 2) 
+        || (Math.abs(position.rank - newPosition.rank) == 2 && Math.abs(position.file - newPosition.file) == 1))
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override

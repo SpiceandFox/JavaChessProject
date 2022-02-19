@@ -30,7 +30,11 @@ public class Bishop extends ChessPiece {
 			return false;
 		}
 
-		return true;
+		if (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file) ) {
+			return true;
+		}
+
+		return false;
     }
 
     @Override

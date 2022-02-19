@@ -22,9 +22,26 @@ public class Queen extends ChessPiece{
 
     @Override
     protected boolean isLegalMove(Position newPosition) {
-        
-
-		return true;
+      if (!board.isInBounds(newPosition)) {
+        return false;
+      }
+  
+      ChessPiece newPositionFigure = this.board.getChessPiece(newPosition);
+      
+      if (newPositionFigure.getColor() == this.getColor())
+      {
+        return false;
+      }
+  
+      if (
+        ((this.position.file == newPosition.file&&this.position.rank != newPosition.rank)
+        ||(this.position.file != newPosition.file&&this.position.rank == newPosition.rank))
+        || (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file) )
+        ) {
+        return true;
+      }
+  
+      return false;
     }
 
     @Override
