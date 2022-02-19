@@ -1,32 +1,32 @@
 package chess;
+
 import java.util.ArrayList;
 
-public class Pawn extends ChessPiece{
+public class Pawn extends ChessPiece {
 
-	public Pawn (ColorEnum color, ChessBoard board)
-	{
+	public Pawn(ColorEnum color, ChessBoard board) {
 		super(color, board);
 	}
 
-    public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException{
-        ArrayList<Position> result = new ArrayList<>();
-        int rankDirection = -1;
+	public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException {
+		ArrayList<Position> result = new ArrayList<>();
+		int rankDirection = -1;
 
 		if (this.getColor() == ColorEnum.White) {
-			rankDirection = 1;	
+			rankDirection = 1;
 		}
 
 		Position tempPosition = new Position(this.position);
 
 		// square infront of pawn
-		tempPosition.rank = tempPosition.rank + (1*rankDirection);
+		tempPosition.rank = tempPosition.rank + (1 * rankDirection);
 		if (isLegalMove(tempPosition)) {
 			result.add(tempPosition);
 		}
 
 		// double move
 		tempPosition = new Position(this.position);
-		tempPosition.rank = tempPosition.rank + (2*rankDirection);
+		tempPosition.rank = tempPosition.rank + (2 * rankDirection);
 		if (isLegalMove(tempPosition)) {
 			result.add(tempPosition);
 		}
@@ -34,27 +34,26 @@ public class Pawn extends ChessPiece{
 		// right side
 		tempPosition = new Position(this.position);
 		tempPosition.file++;
-		tempPosition.rank = tempPosition.rank + (1*rankDirection);
+		tempPosition.rank = tempPosition.rank + (1 * rankDirection);
 		if (isLegalMove(tempPosition)) {
 			result.add(tempPosition);
 		}
-		
 
-		//left side
+		// left side
 		tempPosition = new Position(this.position);
 		tempPosition.file--;
-		tempPosition.rank = tempPosition.rank + (1*rankDirection);
+		tempPosition.rank = tempPosition.rank + (1 * rankDirection);
 		if (isLegalMove(tempPosition)) {
 			result.add(tempPosition);
 		}
 
-        return result;
-    }
+		return result;
+	}
 
 	@Override
 	protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 
-		//todo finish
+		// todo finish
 
 		if (!super.isLegalMove(newPosition)) {
 			return false;
@@ -62,29 +61,29 @@ public class Pawn extends ChessPiece{
 		int fileDelta = newPosition.file - this.position.file;
 		int rankDelta = newPosition.rank - this.position.rank;
 
-		//pawn always increases/decreases rank
+		// pawn always increases/decreases rank
 		if (rankDelta == 0) {
 			return false;
 		}
 
-		//check direction
+		// check direction
 		if (rankDelta > 0 && this.getColor() == ColorEnum.Black) {
 			return false;
 		}
 		if (rankDelta < 0 && this.getColor() == ColorEnum.White) {
 			return false;
 		}
-		//check file
+		// check file
 		if (Math.abs(fileDelta) > 1) {
 			return false;
 		}
-		//check rank
+		// check rank
 		if (Math.abs(rankDelta) > 2) {
 			return false;
 		}
-		//only 2 squares at specific ranks
-		//color is irrelevant, because it would be out of bounds or wrong direction
-		if (Math.abs(rankDelta) == 2 && !((this.position.rank == 1)||(this.position.rank == 6))) {
+		// only 2 squares at specific ranks
+		// color is irrelevant, because it would be out of bounds or wrong direction
+		if (Math.abs(rankDelta) == 2 && !((this.position.rank == 1) || (this.position.rank == 6))) {
 			return false;
 		}
 		ChessPiece newPositionFigure = board.getChessPiece(newPosition);
@@ -93,15 +92,12 @@ public class Pawn extends ChessPiece{
 			if (newPositionFigure.getColor() != ColorEnum.Empty) {
 				return false;
 			}
-		}
-		else 
-		{
+		} else {
 			if (newPositionFigure.getColor() == ColorEnum.Empty) {
 				return false;
 			}
 		}
-		if (newPositionFigure instanceof EnPassentShadow == false && newPositionFigure.getColor() == this.getColor() ) 
-		{
+		if (newPositionFigure instanceof EnPassentShadow == false && newPositionFigure.getColor() == this.getColor()) {
 			return false;
 		}
 

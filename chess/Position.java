@@ -1,24 +1,25 @@
 package chess;
-public class Position{
+
+public class Position {
     protected int file;
     protected int rank;
-    
-    public Position (int rank, int file){
-    	this.file = file;
-    	this.rank = rank;
+
+    public Position(int rank, int file) {
+        this.file = file;
+        this.rank = rank;
     }
 
-    public Position (Position oldPosition){
+    public Position(Position oldPosition) {
         file = oldPosition.file;
         rank = oldPosition.rank;
     }
 
-    public Position(){
+    public Position() {
         file = 0;
         rank = 0;
     }
 
-    public Position (String positionString){
+    public Position(String positionString) {
         char[] tempChars = positionString.toCharArray();
         this.rank = Character.getNumericValue(tempChars[1]);
         this.rank--;
@@ -54,10 +55,10 @@ public class Position{
     }
 
     public int getBoardArrayIndex() {
-        return (this.file + ( 8 * this.rank ) );
+        return (this.file + (8 * this.rank));
     }
 
-    public void updateInternalValues( int boardArrayIndex ){
+    public void updateInternalValues(int boardArrayIndex) {
         this.file = boardArrayIndex % 8;
         this.rank = boardArrayIndex / 8;
     }
@@ -67,7 +68,7 @@ public class Position{
         if (obj instanceof Position == false) {
             return false;
         }
-        if ((this.rank == ((Position)obj).rank)&&(this.file == ((Position)obj).file)) {
+        if ((this.rank == ((Position) obj).rank) && (this.file == ((Position) obj).file)) {
             return true;
         }
         return false;

@@ -1,7 +1,8 @@
 package chess;
+
 import java.util.ArrayList;
 
-public class NullChessPiece extends ChessPiece{
+public class NullChessPiece extends ChessPiece {
 
 	@Override
 	public ArrayList<Position> getAllPossibleMoves() {
@@ -18,8 +19,7 @@ public class NullChessPiece extends ChessPiece{
 		return ' ';
 	}
 
-	public NullChessPiece(ChessBoard board)
-	{
+	public NullChessPiece(ChessBoard board) {
 		super(ColorEnum.Empty, board);
 	}
 }

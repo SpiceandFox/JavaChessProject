@@ -1,39 +1,41 @@
 package chess;
+
 import java.util.ArrayList;
 import java.util.List;
+
 public class ChessBoard {
 
-    //#region Attributes
+    // #region Attributes
     private ChessPiece[] figures = new ChessPiece[64];
     private ColorEnum colorToPlay;
     private ArrayList<ChessPiece> castlingFigures = new ArrayList<>();
     private EnPassentShadow activeShadow;
     private int halfmoveClock;
     private int fullmoveNumber;
-    //#endregion
+    // #endregion
 
-    //#region Constructors
-    public ChessBoard(){
-    	for (int i = 0; i < figures.length; i++) {
-		    figures[i] = new NullChessPiece(this);
-		}
+    // #region Constructors
+    public ChessBoard() {
+        for (int i = 0; i < figures.length; i++) {
+            figures[i] = new NullChessPiece(this);
+        }
         colorToPlay = ColorEnum.White;
     }
 
     // using Forsyth-Edwards Notation
-    public ChessBoard(String boardString){
+    public ChessBoard(String boardString) {
         int currentWorkingIndex = 0;
         ArrayList<ChessPiece> tempFigures = new ArrayList<>();
 
         String[] fenFields = boardString.split(" ");
 
-        //reverse string
+        // reverse string
         StringBuilder sb = new StringBuilder(fenFields[0]);
         fenFields[0] = sb.reverse().toString();
-        
+
         char[] figureChars = fenFields[0].toCharArray();
-        
-        //create all chesspieces
+
+        // create all chesspieces
         for (char c : figureChars) {
             tempFigures = getNewChessPieceFromChar(c);
             for (ChessPiece figure : tempFigures) {
@@ -42,59 +44,52 @@ public class ChessBoard {
             }
         }
 
-        //active color
+        // active color
         if (fenFields[1].equals("w")) {
             colorToPlay = ColorEnum.White;
-        }
-        else {
+        } else {
             colorToPlay = ColorEnum.Black;
         }
 
-        //set Castling rights
+        // set Castling rights
         this.setAllCastlingRights(fenFields[2]);
 
-        //en Passant target
+        // en Passant target
         if (!fenFields[3].equals("-")) {
             Position tempPosition = new Position(fenFields[3]);
             figures[tempPosition.getBoardArrayIndex()] = new EnPassentShadow(this);
         }
 
-        //Halfmove clock
+        // Halfmove clock
         this.halfmoveClock = Integer.parseInt(fenFields[4]);
 
-        //fullmove number
+        // fullmove number
         this.fullmoveNumber = Integer.parseInt(fenFields[5]);
 
         this.updateAllPositions();
 
     }
-    //#endregion
-    
-    //#region Public Methods
+    // #endregion
+
+    // #region Public Methods
 
     public String getFenString() {
         return "asdf";
     }
 
-    public ColorEnum getCurrentPlayer(){
+    public ColorEnum getCurrentPlayer() {
         return colorToPlay;
     }
 
-    //#endregion
+    // #endregion
 
-    //#region Protected Methods
+    // #region Protected Methods
 
+    // #endregion
 
+    // #region Private Methods
 
-
-    //#endregion
-
-    //#region Private Methods
-
-
-
-    //#endregion
-    
+    // #endregion
 
     protected ArrayList<ChessPiece> getAllChessPiecesFromColor(ColorEnum color) {
         ArrayList<ChessPiece> result = new ArrayList<>();
@@ -108,19 +103,19 @@ public class ChessBoard {
         return result;
     }
 
-    public ChessPiece[] getChessPieces(){
+    public ChessPiece[] getChessPieces() {
         return figures;
     }
-    
-    public ChessPiece getChessPiece(Position position){
-    	return figures[ position.getBoardArrayIndex() ];
+
+    public ChessPiece getChessPiece(Position position) {
+        return figures[position.getBoardArrayIndex()];
     }
-    
-    public boolean isInBounds(Position position){
+
+    public boolean isInBounds(Position position) {
         return position.file < 8 && position.file >= 0 && position.rank < 8 && position.rank >= 0;
     }
-    
-    private ArrayList<ChessPiece> getNewChessPieceFromChar(char c){
+
+    private ArrayList<ChessPiece> getNewChessPieceFromChar(char c) {
         ArrayList<ChessPiece> result = new ArrayList<>();
         if (Character.isDigit(c)) {
             for (int i = 0; i < Character.getNumericValue(c); i++) {
@@ -170,11 +165,10 @@ public class ChessBoard {
                 break;
         }
 
-
         return result;
     }
 
-    private void setAllCastlingRights( String castlingFiguresString ){
+    private void setAllCastlingRights(String castlingFiguresString) {
         char[] tempChars = castlingFiguresString.toCharArray();
         ChessPiece figureToChange;
         for (char c : tempChars) {
@@ -182,65 +176,63 @@ public class ChessBoard {
                 case 'k':
                     figureToChange = figures[7];
                     if (figureToChange instanceof Rook) {
-                        ((Rook)figureToChange).setCastlingRights();
+                        ((Rook) figureToChange).setCastlingRights();
                     }
                     figureToChange = figures[4];
                     if (figureToChange instanceof King) {
-                        ((King)figureToChange).setCastlingRights();
+                        ((King) figureToChange).setCastlingRights();
                     }
                     break;
                 case 'q':
                     figureToChange = figures[0];
                     if (figureToChange instanceof Rook) {
-                        ((Rook)figureToChange).setCastlingRights();
+                        ((Rook) figureToChange).setCastlingRights();
                     }
                     figureToChange = figures[4];
                     if (figureToChange instanceof King) {
-                        ((King)figureToChange).setCastlingRights();
+                        ((King) figureToChange).setCastlingRights();
                     }
                     break;
                 case 'K':
                     figureToChange = figures[63];
                     if (figureToChange instanceof Rook) {
-                        ((Rook)figureToChange).setCastlingRights();
+                        ((Rook) figureToChange).setCastlingRights();
                     }
                     figureToChange = figures[60];
                     if (figureToChange instanceof King) {
-                        ((King)figureToChange).setCastlingRights();
+                        ((King) figureToChange).setCastlingRights();
                     }
                     break;
                 case 'Q':
                     figureToChange = figures[56];
                     if (figureToChange instanceof Rook) {
-                        ((Rook)figureToChange).setCastlingRights();
+                        ((Rook) figureToChange).setCastlingRights();
                     }
                     figureToChange = figures[60];
                     if (figureToChange instanceof King) {
-                        ((King)figureToChange).setCastlingRights();
+                        ((King) figureToChange).setCastlingRights();
                     }
                     break;
             }
         }
     }
 
-    public boolean wayIsClear( Position pos1, Position pos2 ){
+    public boolean wayIsClear(Position pos1, Position pos2) {
         int directionFile = 0;
         int directionRank = 0;
-        
+
         if (pos1.rank != pos2.rank) {
             if (pos1.rank < pos2.rank) {
-                directionRank = 1; 
-            } 
-            else {
+                directionRank = 1;
+            } else {
                 directionRank = -1;
             }
         }
 
         if (pos1.file != pos2.file) {
             if (pos1.file < pos2.file) {
-                directionFile = 1; 
-            } 
-            else {
+                directionFile = 1;
+            } else {
                 directionFile = -1;
             }
         }
@@ -249,7 +241,7 @@ public class ChessBoard {
         tempPos.rank += directionRank;
         while (!tempPos.equals(pos2)) {
             ChessPiece figureOnPosition = figures[tempPos.getBoardArrayIndex()];
-            if (( figureOnPosition instanceof NullChessPiece )||(figureOnPosition instanceof EnPassentShadow)) {
+            if ((figureOnPosition instanceof NullChessPiece) || (figureOnPosition instanceof EnPassentShadow)) {
                 tempPos.file += directionFile;
                 tempPos.rank += directionRank;
                 continue;
@@ -259,22 +251,22 @@ public class ChessBoard {
         return true;
     }
 
-    public void moveChessPiece(Position from, Position to) throws InvalidMoveException, GameStateException, WinException {
+    public void moveChessPiece(Position from, Position to)
+            throws InvalidMoveException, GameStateException, WinException {
         ChessPiece figure = this.getChessPiece(from);
         if (figure.getColor() == ColorEnum.Empty) {
             throw new InvalidMoveException("You didn't select a playing piece");
         }
         if (figure.getColor() != this.colorToPlay) {
             throw new InvalidMoveException("You selected the wrong colored playing piece");
-        } 
-        
+        }
+
         if (figure.isLegalMove(to)) {
             figures[to.getBoardArrayIndex()] = figure;
             figures[from.getBoardArrayIndex()] = new NullChessPiece(this);
             placeEnPassantShadow(figure, to);
             finishTurn(figure);
-        }
-        else {
+        } else {
             throw new InvalidMoveException("Your piece can't move that way");
         }
     }
@@ -282,8 +274,7 @@ public class ChessBoard {
     private void finishTurn(ChessPiece figure) throws WinException, InvalidMoveException, GameStateException {
         if (colorToPlay == ColorEnum.White) {
             colorToPlay = ColorEnum.Black;
-        }
-        else {
+        } else {
             colorToPlay = ColorEnum.White;
         }
 
@@ -292,17 +283,16 @@ public class ChessBoard {
         fullmoveNumber++;
         if (figure instanceof Pawn) {
             halfmoveClock = 0;
-        }
-        else {
+        } else {
             halfmoveClock++;
         }
 
         if (gameIsOver()) {
             throw new WinException(figure.getColor().toString());
         }
-    }   
+    }
 
-    private boolean gameIsOver() throws InvalidMoveException, GameStateException{
+    private boolean gameIsOver() throws InvalidMoveException, GameStateException {
         ArrayList<ChessPiece> enemyFigures = getAllChessPiecesFromColor(colorToPlay);
         for (ChessPiece figure : enemyFigures) {
             List<Position> possibleMoves = new ArrayList<>();
@@ -334,14 +324,13 @@ public class ChessBoard {
         }
     }
 
-    public King getKing(ColorEnum color) throws GameStateException{
+    public King getKing(ColorEnum color) throws GameStateException {
         for (ChessPiece figure : figures) {
-            if ((figure instanceof King)&&(figure.getColor() == color)) {
-                return (King)figure;
+            if ((figure instanceof King) && (figure.getColor() == color)) {
+                return (King) figure;
             }
         }
         throw new GameStateException("There is no King on the Board");
     }
-
 
 }

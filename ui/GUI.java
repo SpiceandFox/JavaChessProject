@@ -1,12 +1,8 @@
 package ui;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import chess.ChessBoard;
 import chess.ChessPiece;

@@ -1,4 +1,5 @@
 package chess;
+
 import java.util.ArrayList;
 
 public class EnPassentShadow extends ChessPiece {

@@ -1,4 +1,5 @@
 package ui;
+
 import chess.ChessBoard;
 
 public class Main {
