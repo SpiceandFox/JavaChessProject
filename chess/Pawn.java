@@ -8,7 +8,7 @@ public class Pawn extends ChessPiece{
 		super(color, board);
 	}
 
-    public ArrayList<Position> getAllPossibleMoves(){
+    public ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException{
         ArrayList<Position> result = new ArrayList<>();
         int rankDirection = -1;
 
@@ -52,11 +52,11 @@ public class Pawn extends ChessPiece{
     }
 
 	@Override
-	protected boolean isLegalMove(Position newPosition) {
+	protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 
 		//todo finish
 
-		if (!board.isInBounds(newPosition)) {
+		if (!super.isLegalMove(newPosition)) {
 			return false;
 		}
 		int fileDelta = newPosition.file - this.position.file;
@@ -87,10 +87,6 @@ public class Pawn extends ChessPiece{
 		if (Math.abs(rankDelta) == 2 && !((this.position.rank == 1)||(this.position.rank == 6))) {
 			return false;
 		}
-
-		if (!board.wayIsClear(position, newPosition)) {
-			return false;
-		}
 		ChessPiece newPositionFigure = board.getChessPiece(newPosition);
 
 		if (fileDelta == 0) {
@@ -108,10 +104,6 @@ public class Pawn extends ChessPiece{
 		{
 			return false;
 		}
-
-	    
-
-
 
 		return true;
 	}

@@ -226,10 +226,6 @@ public class ChessBoard {
     public boolean wayIsClear( Position pos1, Position pos2 ){
         int directionFile = 0;
         int directionRank = 0;
-
-        if (figures[pos1.getBoardArrayIndex()] instanceof Knight) {
-            return true;
-        }
         
         if (pos1.rank != pos2.rank) {
             if (pos1.rank < pos2.rank) {
@@ -271,10 +267,6 @@ public class ChessBoard {
         if (figure.getColor() != this.colorToPlay) {
             throw new InvalidMoveException("You selected the wrong colored playing piece");
         } 
-
-        if (!wayIsClear(from, to)) {
-            throw new InvalidMoveException("You can't move through pieces");
-        }
         
         if (figure.isLegalMove(to)) {
             figures[to.getBoardArrayIndex()] = figure;
@@ -313,7 +305,8 @@ public class ChessBoard {
     private boolean gameIsOver() throws InvalidMoveException, GameStateException{
         ArrayList<ChessPiece> enemyFigures = getAllChessPiecesFromColor(colorToPlay);
         for (ChessPiece figure : enemyFigures) {
-            List<Position> possibleMoves = figure.getAllPossibleMoves();
+            List<Position> possibleMoves = new ArrayList<>();
+            possibleMoves.addAll(figure.getAllPossibleMoves());
             if (possibleMoves.isEmpty()) {
                 return false;
             }
