@@ -50,9 +50,8 @@ public class ChessBoardPanel extends JLayeredPane {
                 return p;
         }
 
-        public void displayPossibleMoves(ChessPiece piece) throws InvalidMoveException, GameStateException {
+        public void displayPossibleMoves(ArrayList<Position> moves) throws InvalidMoveException, GameStateException {
                 clearPossibleMoves();
-                ArrayList<Position> moves = piece.getAllPossibleMoves();
                 for (Position move : moves) {
                         displayPossibleMove(move.getBoardArrayIndex());
                 }
@@ -76,6 +75,7 @@ public class ChessBoardPanel extends JLayeredPane {
         public void clearPossibleMoves() {
                 for (JLabel possibleMove : possibleMovesLabels) {
                         this.moveToBack(possibleMove);
+                        this.remove(possibleMove);
                 }
                 possibleMovesLabels.clear();
                 this.repaint();
@@ -137,11 +137,11 @@ public class ChessBoardPanel extends JLayeredPane {
 
         private void createSquares() {
                 boolean checkeredBit = false;
-                for (int i = 0; i < 64; i++) {
+                for (int i = 63; i >= 0; i--) {
 
                         // needs to flip every row, otherwise there is no
                         // checker pattern on the board
-                        if (i % 8 == 0) {
+                        if (i % 8 == 7) {
                                 checkeredBit = !checkeredBit;
                         }
 
