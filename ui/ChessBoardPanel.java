@@ -16,7 +16,7 @@ import java.awt.*;
 public class ChessBoardPanel extends JPanel {
         Color whiteColor;
         Color blackColor;
-        ArrayList<JLabel> possibleMovesLabels = new ArrayList<>();
+
         ChessFigureButton[] squares = new ChessFigureButton[64];
         Hashtable<Character, Icon> images = new Hashtable<>();
         ActionListener listener;
@@ -33,17 +33,14 @@ public class ChessBoardPanel extends JPanel {
                 this.setVisible(true);
         }
 
-        public void displayPossibleMove(int position) {
-                Point p = squares[position].getLocation();
-                JLabel possibleMove = new JLabel();
-                possibleMove.setLocation(p);
-                possibleMove.setSize(5, 5);
-                possibleMove.setVisible(true);
-                possibleMovesLabels.add(possibleMove);
-        }
-
-        public void clearPossibleMoves() {
-                possibleMovesLabels.clear();
+        public Point getChessSquareCenterPoint(int index) {
+                Point p = squares[index].getLocation();
+                int buttonSize = squares[index].getHeight();
+                p.x += buttonSize / 2;
+                p.x += 7;
+                p.y += buttonSize / 2;
+                p.y += 7;
+                return p;
         }
 
         public void setChessPiece(char key, int position) {

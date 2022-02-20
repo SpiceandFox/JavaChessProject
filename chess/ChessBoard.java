@@ -225,6 +225,10 @@ public class ChessBoard {
         int directionFile = 0;
         int directionRank = 0;
 
+        if (this.getChessPiece(pos1) instanceof Knight) {
+            return true;
+        }
+
         if (pos1.rank != pos2.rank) {
             if (pos1.rank < pos2.rank) {
                 directionRank = 1;

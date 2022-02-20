@@ -22,10 +22,10 @@ public abstract class ChessPiece {
         if (!board.wayIsClear(position, newPosition)) {
             return false;
         }
+        // if (!kingIsSafe()) {
+        // return false;
+        // }
 
-        if (!kingIsSafe()) {
-            return false;
-        }
         return true;
     }
 
