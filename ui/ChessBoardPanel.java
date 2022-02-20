@@ -6,6 +6,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import chess.ChessPiece;
+import chess.GameStateException;
+import chess.InvalidMoveException;
+import chess.Position;
+
+import javax.swing.JLayeredPane;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -13,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.awt.*;
 
-public class ChessBoardPanel extends JPanel {
+public class ChessBoardPanel extends JLayeredPane {
         Color whiteColor;
         Color blackColor;
+
+        ArrayList<JLabel> possibleMovesLabels = new ArrayList<>();
 
         ChessFigureButton[] squares = new ChessFigureButton[64];
         Hashtable<Character, Icon> images = new Hashtable<>();
@@ -37,10 +46,39 @@ public class ChessBoardPanel extends JPanel {
                 Point p = squares[index].getLocation();
                 int buttonSize = squares[index].getHeight();
                 p.x += buttonSize / 2;
-                p.x += 7;
                 p.y += buttonSize / 2;
-                p.y += 7;
                 return p;
+        }
+
+        public void displayPossibleMoves(ChessPiece piece) throws InvalidMoveException, GameStateException {
+                clearPossibleMoves();
+                ArrayList<Position> moves = piece.getAllPossibleMoves();
+                for (Position move : moves) {
+                        displayPossibleMove(move.getBoardArrayIndex());
+                }
+
+        }
+
+        public void displayPossibleMove(int position) {
+                Point p = getChessSquareCenterPoint(position);
+                JLabel possibleMove = new JLabel();
+                possibleMove.setBackground(Color.GREEN);
+                possibleMove.setLocation(p);
+                possibleMove.setOpaque(true);
+                possibleMove.setSize(5, 5);
+                add(possibleMove);
+                this.moveToFront(possibleMove);
+                possibleMove.setVisible(true);
+                possibleMovesLabels.add(possibleMove);
+                repaint();
+        }
+
+        public void clearPossibleMoves() {
+                for (JLabel possibleMove : possibleMovesLabels) {
+                        this.moveToBack(possibleMove);
+                }
+                possibleMovesLabels.clear();
+                this.repaint();
         }
 
         public void setChessPiece(char key, int position) {

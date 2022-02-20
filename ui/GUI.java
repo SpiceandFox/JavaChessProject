@@ -23,7 +23,6 @@ public class GUI implements IUserInterface {
     private ActionListener chessPieceListener;
     private JLayeredPane chessBoardSection;
     private JPanel possibleMovePanel;
-    ArrayList<JLabel> possibleMovesPanels = new ArrayList<>();
 
     public GUI() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,41 +59,12 @@ public class GUI implements IUserInterface {
         chessBoardSection.add(possibleMovePanel, Integer.valueOf(3));
     }
 
-    private void displayPossibleMoves(ChessPiece piece) throws InvalidMoveException, GameStateException {
-        clearPossibleMoves();
-        ArrayList<Position> moves = piece.getAllPossibleMoves();
-        for (Position move : moves) {
-            displayPossibleMove(move.getBoardArrayIndex());
-        }
-
-    }
-
-    public void displayPossibleMove(int position) {
-        Point p = chessPanel.getChessSquareCenterPoint(position);
-        JLabel possibleMove = new JLabel();
-        possibleMove.setBackground(Color.GREEN);
-        possibleMove.setLocation(p);
-        possibleMove.setOpaque(true);
-        possibleMove.setSize(5, 5);
-        possibleMovePanel.add(possibleMove);
-        possibleMovesPanels.add(possibleMove);
-        possibleMove.setVisible(true);
-        possibleMovePanel.repaint();
-    }
-
-    public void clearPossibleMoves() {
-        for (JLabel jLabel : possibleMovesPanels) {
-            jLabel.setBackground(jLabel.getBackground());
-        }
-        possibleMovesPanels.clear();
-    }
-
     private void initListener() {
         this.chessPieceListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = ((ChessFigureButton) e.getSource()).getPosition();
                 try {
-                    displayPossibleMoves(board.getChessPiece(index));
+                    chessPanel.displayPossibleMoves(board.getChessPiece(index));
                 } catch (Exception exception) {
                     displayMessage(exception.getMessage());
                 }
