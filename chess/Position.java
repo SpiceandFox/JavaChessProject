@@ -9,6 +9,10 @@ public class Position {
         this.rank = rank;
     }
 
+    public Position(int boardArrayIndex) {
+        updateInternalValues(boardArrayIndex);
+    }
+
     public Position(Position oldPosition) {
         file = oldPosition.file;
         rank = oldPosition.rank;

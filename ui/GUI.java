@@ -1,10 +1,15 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.*;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 import chess.ChessBoard;
 import chess.ChessPiece;
@@ -17,6 +22,9 @@ public class GUI implements IUserInterface {
     private ChessBoardPanel chessPanel;
     private ChessBoard board;
     private ActionListener chessPieceListener;
+    private JLayeredPane chessBoardSection;
+    private ArrayList<chess.Position> possibleMoves = new ArrayList<>();
+    private Position fromPosition = new Position();
 
     public GUI() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,18 +35,20 @@ public class GUI implements IUserInterface {
         mainFrame.setLayout(null);
 
         initListener();
+        initChessBoardSection();
         chessPanel = new ChessBoardPanel(400, Color.WHITE, Color.BLACK, chessPieceListener);
         chessPanel.setBounds(10, 10, 410, 410);
-        mainFrame.add(chessPanel);
+        chessBoardSection.add(chessPanel);
         mainFrame.setVisible(true);
     }
 
-    private void displayPossibleMoves(ChessPiece piece) throws InvalidMoveException, GameStateException {
-        chessPanel.clearPossibleMoves();
-        ArrayList<Position> moves = piece.getAllPossibleMoves();
-        for (Position move : moves) {
-            chessPanel.displayPossibleMove(move.getBoardArrayIndex());
-        }
+    private void initChessBoardSection() {
+        chessBoardSection = new JLayeredPane();
+        chessBoardSection.setBounds(0, 0, 430, 430);
+        chessBoardSection.setBackground(Color.BLUE);
+        chessBoardSection.setOpaque(true);
+        mainFrame.add(chessBoardSection);
+        chessBoardSection.setVisible(true);
 
     }
 
@@ -47,7 +57,16 @@ public class GUI implements IUserInterface {
             public void actionPerformed(ActionEvent e) {
                 int index = ((ChessFigureButton) e.getSource()).getPosition();
                 try {
-                    displayPossibleMoves(board.getChessPiece(index));
+                    Position toPosition = new Position(index);
+                    ChessPiece activeChessPiece = board.getChessPiece(index);
+                    if (possibleMoves.contains(toPosition)) {
+                        board.moveChessPiece(fromPosition, toPosition);
+                        displayBoard();
+                    } else {
+                        fromPosition = new Position(toPosition);
+                    }
+                    possibleMoves = activeChessPiece.getAllPossibleMoves();
+                    chessPanel.displayPossibleMoves(possibleMoves);
                 } catch (Exception exception) {
                     displayMessage(exception.getMessage());
                 }
@@ -67,10 +86,12 @@ public class GUI implements IUserInterface {
 
     @Override
     public void displayBoard() {
-        ChessPiece[] pieces = reverseArray(board.getChessPieces());
+        chessPanel.clearPossibleMoves();
+        ChessPiece[] pieces = board.getChessPieces();
         for (int i = 0; i < pieces.length; i++) {
             chessPanel.setChessPiece(pieces[i].getName(), i);
         }
+
     }
 
     @Override
