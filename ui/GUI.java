@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextArea;
 
 import chess.ChessBoard;
 import chess.ChessPiece;
@@ -27,6 +28,7 @@ public class GUI implements IUserInterface {
     private JLayeredPane chessBoardSection;
     // errorDisplaySection holds the Textoutput at the buttom of screen
     private JLayeredPane errorDisplaySection;
+    private JTextArea errorTextArea;
     // moveDisplay shows last played moves at right side
     private JLayeredPane moveDisplaySection;
 
@@ -54,6 +56,16 @@ public class GUI implements IUserInterface {
         errorDisplaySection.setOpaque(true);
         mainFrame.add(errorDisplaySection, BorderLayout.SOUTH);
         errorDisplaySection.setVisible(true);
+
+        errorTextArea = new JTextArea("Dies ist ein Test", 4, 20);
+        errorTextArea.setLayout(null);
+        errorTextArea.setEditable(false);
+        errorDisplaySection.setBackground(Color.LIGHT_GRAY);
+        errorTextArea.setOpaque(true);
+        errorTextArea.setPreferredSize(new Dimension(100, 80));
+        errorDisplaySection.add(errorTextArea, BorderLayout.CENTER);
+        errorTextArea.setVisible(true);
+
     }
 
     private void initMoveDisplaySection() {

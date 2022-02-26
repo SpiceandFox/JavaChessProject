@@ -41,8 +41,11 @@ public abstract class ChessPiece {
             throws InvalidMoveException, GameStateException {
         ArrayList<Position> results = new ArrayList<>();
         Position tempPos = new Position(this.position);
+        tempPos.rank = tempPos.rank + rankIncrement;
+        tempPos.file = tempPos.file + fileIncrement;
         while (isLegalMove(tempPos)) {
             results.add(tempPos);
+            tempPos = new Position(tempPos);
             tempPos.rank = tempPos.rank + rankIncrement;
             tempPos.file = tempPos.file + fileIncrement;
         }
