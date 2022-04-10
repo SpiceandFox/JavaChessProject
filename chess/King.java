@@ -74,23 +74,6 @@ public class King extends ChessPiece {
     }
 
     @Override
-    protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
-
-        if (!super.isLegalMove(newPosition)) {
-            return false;
-        }
-
-        if (Math.abs(newPosition.rank - position.rank) > 1) {
-            return false;
-        }
-        if (Math.abs(newPosition.file - position.file) > 1) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
     public char getName() {
         if (this.getColor() == ColorEnum.Black) {
             return 'k';
@@ -112,12 +95,23 @@ public class King extends ChessPiece {
         ArrayList<ChessPiece> enemyFigures = this.board.getAllChessPiecesFromColor(enemyColor);
 
         for (ChessPiece figure : enemyFigures) {
-            if (figure.isLegalMove(newPosition)) {
+            if (figure.canMoveThisWay(newPosition)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    @Override
+    public boolean canMoveThisWay(Position newPosition) {
+        if (Math.abs(newPosition.rank - position.rank) > 1) {
+            return false;
+        }
+        if (Math.abs(newPosition.file - position.file) > 1) {
+            return false;
+        }
+        return true;
     }
 
 }

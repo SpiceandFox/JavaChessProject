@@ -9,6 +9,8 @@ public abstract class ChessPiece {
 
     public abstract ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException;
 
+    public abstract boolean canMoveThisWay(Position newPosition);
+
     protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 
         if (!board.isInBounds(newPosition)) {
@@ -19,14 +21,11 @@ public abstract class ChessPiece {
             return false;
         }
 
-        if (!board.wayIsClear(position, newPosition)) {
+        if (!kingIsSafe()) {
             return false;
         }
-        // if (!kingIsSafe()) {
-        // return false;
-        // }
 
-        return true;
+        return canMoveThisWay(newPosition);
     }
 
     public abstract char getName();

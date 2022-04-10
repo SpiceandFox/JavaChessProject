@@ -22,27 +22,21 @@ public class Queen extends ChessPiece {
   }
 
   @Override
-  protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
-
-    if (!super.isLegalMove(newPosition)) {
-      return false;
-    }
-
-    if (((this.position.file == newPosition.file && this.position.rank != newPosition.rank)
-        || (this.position.file != newPosition.file && this.position.rank == newPosition.rank))
-        || (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file))) {
-      return true;
-    }
-
-    return false;
-  }
-
-  @Override
   public char getName() {
     if (this.getColor() == ColorEnum.Black) {
       return 'q';
     }
     return 'Q';
+  }
+
+  @Override
+  public boolean canMoveThisWay(Position newPosition) {
+    if (!board.wayIsClear(position, newPosition)) {
+      return false;
+    }
+    return (((this.position.file == newPosition.file && this.position.rank != newPosition.rank)
+        || (this.position.file != newPosition.file && this.position.rank == newPosition.rank))
+        || (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file)));
   }
 
 }

@@ -22,4 +22,9 @@ public class NullChessPiece extends ChessPiece {
 	public NullChessPiece(ChessBoard board) {
 		super(ColorEnum.Empty, board);
 	}
+
+	@Override
+	public boolean canMoveThisWay(Position newPosition) {
+		return false;
+	}
 }

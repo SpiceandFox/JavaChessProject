@@ -50,7 +50,7 @@ public class ChessBoardPanel extends JLayeredPane {
                 return p;
         }
 
-        public void displayPossibleMoves(ArrayList<Position> moves) throws InvalidMoveException, GameStateException {
+        public void displayPossibleMoves(ArrayList<Position> moves) {
                 clearPossibleMoves();
                 for (Position move : moves) {
                         displayPossibleMove(move.getBoardArrayIndex());

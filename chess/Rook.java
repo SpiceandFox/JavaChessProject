@@ -1,11 +1,11 @@
 package chess;
+
 import java.util.ArrayList;
 
 public class Rook extends ChessPiece {
 	private boolean hasMoved = true;
 
-	public Rook (ColorEnum color, ChessBoard board)
-	{
+	public Rook(ColorEnum color, ChessBoard board) {
 		super(color, board);
 	}
 
@@ -22,22 +22,6 @@ public class Rook extends ChessPiece {
 		result.addAll(this.getAllPositionsInLine(0, -1));
 		return result;
 	}
-	
-
-	@Override
-	protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
-		if (!super.isLegalMove(newPosition)) {
-			return false;
-		}
-
-		if (((this.position.file == newPosition.file)&&(this.position.rank != newPosition.rank))
-			||((this.position.file != newPosition.file)&&(this.position.rank == newPosition.rank))) {
-			return true;
-		}
-
-		return false;
-	}
-
 
 	@Override
 	public char getName() {
@@ -49,6 +33,15 @@ public class Rook extends ChessPiece {
 
 	public boolean canCastle() {
 		return !hasMoved;
+	}
+
+	@Override
+	public boolean canMoveThisWay(Position newPosition) {
+		if (!board.wayIsClear(position, newPosition)) {
+			return false;
+		}
+		return (((this.position.file == newPosition.file) && (this.position.rank != newPosition.rank))
+				|| ((this.position.file != newPosition.file) && (this.position.rank == newPosition.rank)));
 	}
 
 }

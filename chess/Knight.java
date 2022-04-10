@@ -87,12 +87,7 @@ public class Knight extends ChessPiece {
             return false;
         }
 
-        if ((Math.abs(position.rank - newPosition.rank) == 1 && Math.abs(position.file - newPosition.file) == 2)
-                || (Math.abs(position.rank - newPosition.rank) == 2
-                        && Math.abs(position.file - newPosition.file) == 1)) {
-            return true;
-        }
-        return false;
+        return canMoveThisWay(newPosition);
     }
 
     @Override
@@ -101,6 +96,13 @@ public class Knight extends ChessPiece {
             return 'n';
         }
         return 'N';
+    }
+
+    @Override
+    public boolean canMoveThisWay(Position newPosition) {
+        return ((Math.abs(position.rank - newPosition.rank) == 1 && Math.abs(position.file - newPosition.file) == 2)
+                || (Math.abs(position.rank - newPosition.rank) == 2
+                        && Math.abs(position.file - newPosition.file) == 1));
     }
 
 }

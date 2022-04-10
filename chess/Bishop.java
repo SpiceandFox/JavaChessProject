@@ -19,24 +19,19 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
-    protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
-        if (!super.isLegalMove(newPosition)) {
-            return false;
-        }
-
-        if (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
     public char getName() {
         if (this.getColor() == ColorEnum.Black) {
             return 'b';
         }
         return 'B';
+    }
+
+    @Override
+    public boolean canMoveThisWay(Position newPosition) {
+        if (!board.wayIsClear(position, newPosition)) {
+            return false;
+        }
+        return (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file));
     }
 
 }

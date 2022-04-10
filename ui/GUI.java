@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import chess.ChessBoard;
 import chess.ChessPiece;
@@ -26,9 +29,9 @@ public class GUI implements IUserInterface {
     // ChessBoardSection holds the chessboard and the surrounding rank/file
     // descriptors
     private JLayeredPane chessBoardSection;
-    // errorDisplaySection holds the Textoutput at the buttom of screen
+    // errorDisplaySection holds the Textoutput at the bottom of screen
     private JLayeredPane errorDisplaySection;
-    private JTextArea errorTextArea;
+    private JTextPane errorTextArea;
     // moveDisplay shows last played moves at right side
     private JLayeredPane moveDisplaySection;
 
@@ -57,13 +60,16 @@ public class GUI implements IUserInterface {
         mainFrame.add(errorDisplaySection, BorderLayout.SOUTH);
         errorDisplaySection.setVisible(true);
 
-        errorTextArea = new JTextArea("Dies ist ein Test", 4, 20);
-        errorTextArea.setLayout(null);
-        errorTextArea.setEditable(false);
+        errorTextArea = new JTextPane();
+        SimpleAttributeSet attributeSet = new SimpleAttributeSet();
+        StyleConstants.setBold(attributeSet, true);
+        errorTextArea.setCharacterAttributes(attributeSet, true);
+        errorTextArea.setText("test");
         errorDisplaySection.setBackground(Color.LIGHT_GRAY);
         errorTextArea.setOpaque(true);
         errorTextArea.setPreferredSize(new Dimension(100, 80));
         errorDisplaySection.add(errorTextArea, BorderLayout.CENTER);
+        errorDisplaySection.moveToFront(errorTextArea);
         errorTextArea.setVisible(true);
 
     }
@@ -84,7 +90,8 @@ public class GUI implements IUserInterface {
         chessBoardSection.setBackground(Color.BLUE);
         chessBoardSection.setOpaque(true);
         mainFrame.add(chessBoardSection, BorderLayout.CENTER);
-        chessPanel = new ChessBoardPanel(400, Color.WHITE, Color.BLACK, chessPieceListener);
+        chessPanel = new ChessBoardPanel(400, new Color(239, 217, 181, 255), new Color(181, 136, 99, 255),
+                chessPieceListener);
         chessPanel.setPreferredSize(new Dimension(400, 400));
         chessBoardSection.add(chessPanel, new GridBagConstraints());
         chessBoardSection.setVisible(true);

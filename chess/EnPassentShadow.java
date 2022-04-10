@@ -21,4 +21,9 @@ public class EnPassentShadow extends ChessPiece {
     public char getName() {
         return ' ';
     }
+
+    @Override
+    public boolean canMoveThisWay(Position newPosition) {
+        return false;
+    }
 }

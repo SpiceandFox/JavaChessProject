@@ -279,7 +279,7 @@ public class ChessBoard {
         }
     }
 
-    private void finishTurn(ChessPiece figure) throws WinException, InvalidMoveException, GameStateException {
+    private void finishTurn(ChessPiece figure) throws InvalidMoveException, GameStateException, WinException {
         if (colorToPlay == ColorEnum.White) {
             colorToPlay = ColorEnum.Black;
         } else {
@@ -306,10 +306,10 @@ public class ChessBoard {
             List<Position> possibleMoves = new ArrayList<>();
             possibleMoves.addAll(figure.getAllPossibleMoves());
             if (possibleMoves.isEmpty()) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private void placeEnPassantShadow(ChessPiece figure, Position to) {
