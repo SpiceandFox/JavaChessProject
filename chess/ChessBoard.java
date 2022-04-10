@@ -61,7 +61,7 @@ public class ChessBoard {
         // en Passant target
         if (!fenFields[3].equals("-")) {
             Position tempPosition = new Position(fenFields[3]);
-            figures[tempPosition.getBoardArrayIndex()] = new EnPassentShadow(this);
+            figures[tempPosition.getBoardArrayIndex()] = new EnPassentShadow(this, tempPosition);
         }
 
         // Halfmove clock
@@ -407,7 +407,7 @@ public class ChessBoard {
         Position enPassantShadowPosition = new Position(figure.position);
         enPassantShadowPosition.rank = Math.abs(figure.position.rank - to.rank);
 
-        this.activeShadow = new EnPassentShadow(this);
+        this.activeShadow = new EnPassentShadow(this, enPassantShadowPosition);
         figures[enPassantShadowPosition.getBoardArrayIndex()] = this.activeShadow;
     }
 

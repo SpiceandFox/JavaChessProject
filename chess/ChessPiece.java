@@ -76,7 +76,7 @@ public abstract class ChessPiece {
      * 
      * @return ColorEnum
      */
-    protected ColorEnum getColor() {
+    public ColorEnum getColor() {
         return this.color;
     }
 
