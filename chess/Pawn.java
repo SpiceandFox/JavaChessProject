@@ -60,9 +60,6 @@ public class Pawn extends ChessPiece {
 
 	@Override
 	public boolean canMoveThisWay(Position newPosition) {
-		if (!board.wayIsClear(position, newPosition)) {
-			return false;
-		}
 
 		int fileDelta = newPosition.file - this.position.file;
 		int rankDelta = newPosition.rank - this.position.rank;
@@ -104,6 +101,10 @@ public class Pawn extends ChessPiece {
 			}
 		}
 		if (newPositionFigure instanceof EnPassentShadow == false && newPositionFigure.getColor() == this.getColor()) {
+			return false;
+		}
+
+		if (!board.wayIsClear(position, newPosition)) {
 			return false;
 		}
 

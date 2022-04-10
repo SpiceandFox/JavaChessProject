@@ -28,10 +28,10 @@ public class Bishop extends ChessPiece {
 
     @Override
     public boolean canMoveThisWay(Position newPosition) {
-        if (!board.wayIsClear(position, newPosition)) {
+        if ((Math.abs(this.position.rank - newPosition.rank) != Math.abs(this.position.file - newPosition.file))) {
             return false;
         }
-        return (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file));
+        return board.wayIsClear(position, newPosition);
     }
 
 }

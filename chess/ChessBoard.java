@@ -5,16 +5,16 @@ import java.util.List;
 
 public class ChessBoard {
 
-    // #region Attributes
     private ChessPiece[] figures = new ChessPiece[64];
     private ColorEnum colorToPlay;
     private ArrayList<ChessPiece> castlingFigures = new ArrayList<>();
     private EnPassentShadow activeShadow;
     private int halfmoveClock;
     private int fullmoveNumber;
-    // #endregion
 
-    // #region Constructors
+    /**
+     * Empty constructor
+     */
     public ChessBoard() {
         for (int i = 0; i < figures.length; i++) {
             figures[i] = new NullChessPiece(this);
@@ -22,7 +22,11 @@ public class ChessBoard {
         colorToPlay = ColorEnum.White;
     }
 
-    // using Forsyth-Edwards Notation
+    /**
+     * constructor using Forsyth-Edwards Notation
+     * 
+     * @param boardString
+     */
     public ChessBoard(String boardString) {
         int currentWorkingIndex = 0;
         ArrayList<ChessPiece> tempFigures = new ArrayList<>();
@@ -69,28 +73,32 @@ public class ChessBoard {
         this.updateAllPositions();
 
     }
-    // #endregion
 
-    // #region Public Methods
-
+    /**
+     * Returns the Forsyth Edword Notation of current boardstate
+     * TO DO
+     * 
+     * @return String
+     */
     public String getFenString() {
         return "asdf";
     }
 
+    /**
+     * Returns color of current player
+     * 
+     * @return ColorEnum
+     */
     public ColorEnum getCurrentPlayer() {
         return colorToPlay;
     }
 
-    // #endregion
-
-    // #region Protected Methods
-
-    // #endregion
-
-    // #region Private Methods
-
-    // #endregion
-
+    /**
+     * Returns all chess pieces from parameter color
+     * 
+     * @param color
+     * @return ArrayList<ChessPiece>
+     */
     protected ArrayList<ChessPiece> getAllChessPiecesFromColor(ColorEnum color) {
         ArrayList<ChessPiece> result = new ArrayList<>();
 
@@ -103,22 +111,52 @@ public class ChessBoard {
         return result;
     }
 
+    /**
+     * returns the array representing the board
+     * 
+     * @return ChessPiece[]
+     */
     public ChessPiece[] getChessPieces() {
         return figures;
     }
 
+    /**
+     * returns chess piece of board array on parameter position
+     * 
+     * @param position
+     * @return ChessPiece
+     */
     public ChessPiece getChessPiece(Position position) {
         return figures[position.getBoardArrayIndex()];
     }
 
+    /**
+     * returns chess piece of board array at parameter index
+     * 
+     * @param index
+     * @return ChessPiece
+     */
     public ChessPiece getChessPiece(int index) {
         return figures[index];
     }
 
+    /**
+     * Checks bounds of a position
+     * 
+     * @param position
+     * @return boolean
+     */
     public boolean isInBounds(Position position) {
         return position.file < 8 && position.file >= 0 && position.rank < 8 && position.rank >= 0;
     }
 
+    /**
+     * Returns list of chesspieces based on the character
+     * numerical values return an equal amount of NullChessPieces
+     * 
+     * @param c
+     * @return ArrayList<ChessPiece>
+     */
     private ArrayList<ChessPiece> getNewChessPieceFromChar(char c) {
         ArrayList<ChessPiece> result = new ArrayList<>();
         if (Character.isDigit(c)) {
@@ -172,6 +210,16 @@ public class ChessBoard {
         return result;
     }
 
+    /**
+     * Sets all castling rights only sets rights on normal chess layout
+     * and doesn't work with alternative gamemodes or board layouts
+     * Q = queenside
+     * K = kingside
+     * lower case = black
+     * upper case = white
+     * 
+     * @param castlingFiguresString
+     */
     private void setAllCastlingRights(String castlingFiguresString) {
         char[] tempChars = castlingFiguresString.toCharArray();
         ChessPiece figureToChange;
@@ -221,6 +269,14 @@ public class ChessBoard {
         }
     }
 
+    /**
+     * checks for collition on a straigth line,
+     * can be diagonal
+     * 
+     * @param pos1
+     * @param pos2
+     * @return boolean
+     */
     public boolean wayIsClear(Position pos1, Position pos2) {
         int directionFile = 0;
         int directionRank = 0;
@@ -259,6 +315,15 @@ public class ChessBoard {
         return true;
     }
 
+    /**
+     * executes the move
+     * 
+     * @param from
+     * @param to
+     * @throws InvalidMoveException
+     * @throws GameStateException
+     * @throws WinException
+     */
     public void moveChessPiece(Position from, Position to)
             throws InvalidMoveException, GameStateException, WinException {
         ChessPiece figure = this.getChessPiece(from);
@@ -279,13 +344,20 @@ public class ChessBoard {
         }
     }
 
+    /**
+     * updates the boardstate
+     * 
+     * @param figure
+     * @throws InvalidMoveException
+     * @throws GameStateException
+     * @throws WinException
+     */
     private void finishTurn(ChessPiece figure) throws InvalidMoveException, GameStateException, WinException {
         if (colorToPlay == ColorEnum.White) {
             colorToPlay = ColorEnum.Black;
         } else {
             colorToPlay = ColorEnum.White;
         }
-
         updateAllPositions();
 
         fullmoveNumber++;
@@ -298,20 +370,33 @@ public class ChessBoard {
         if (gameIsOver()) {
             throw new WinException(figure.getColor().toString());
         }
+
     }
 
+    /**
+     * checks for either a win or a remis based on remaining legal moves
+     * TO DO implement remis
+     * 
+     * @return boolean
+     * @throws InvalidMoveException
+     * @throws GameStateException
+     */
     private boolean gameIsOver() throws InvalidMoveException, GameStateException {
         ArrayList<ChessPiece> enemyFigures = getAllChessPiecesFromColor(colorToPlay);
+        List<Position> possibleMoves = new ArrayList<>();
         for (ChessPiece figure : enemyFigures) {
-            List<Position> possibleMoves = new ArrayList<>();
             possibleMoves.addAll(figure.getAllPossibleMoves());
-            if (possibleMoves.isEmpty()) {
-                return true;
-            }
         }
-        return false;
+        return possibleMoves.isEmpty();
     }
 
+    /**
+     * en passent shadows is spawned whenever a pawn moves
+     * two spaces forward
+     * 
+     * @param figure
+     * @param to
+     */
     private void placeEnPassantShadow(ChessPiece figure, Position to) {
         if (figure instanceof Pawn == false) {
             return;
@@ -332,6 +417,13 @@ public class ChessBoard {
         }
     }
 
+    /**
+     * returns the king of parameter color
+     * 
+     * @param color
+     * @return King
+     * @throws GameStateException
+     */
     public King getKing(ColorEnum color) throws GameStateException {
         for (ChessPiece figure : figures) {
             if ((figure instanceof King) && (figure.getColor() == color)) {
@@ -339,6 +431,39 @@ public class ChessBoard {
             }
         }
         throw new GameStateException("There is no King on the Board");
+    }
+
+    /**
+     * simulates the move and checks for king safety again
+     * TO DO edge case for en passant
+     * 
+     * @param chessPiece
+     * @param newPosition
+     * @return
+     * @throws GameStateException
+     * @throws InvalidMoveException
+     */
+    public boolean kingIsSafeOnNextTurn(ChessPiece chessPiece, Position newPosition)
+            throws InvalidMoveException, GameStateException {
+        int oldPositionBoardIndex = chessPiece.position.getBoardArrayIndex();
+        int newPositionBoardIndex = newPosition.getBoardArrayIndex();
+        ChessPiece currentPieceOnNewPosition = getChessPiece(newPosition);
+
+        figures[newPositionBoardIndex] = chessPiece;
+        figures[oldPositionBoardIndex] = new NullChessPiece(this);
+
+        figures[oldPositionBoardIndex].position.updateInternalValues(oldPositionBoardIndex);
+        figures[newPositionBoardIndex].position.updateInternalValues(newPositionBoardIndex);
+
+        boolean result = chessPiece.kingIsSafe();
+
+        figures[newPositionBoardIndex] = currentPieceOnNewPosition;
+        figures[oldPositionBoardIndex] = chessPiece;
+
+        figures[oldPositionBoardIndex].position.updateInternalValues(oldPositionBoardIndex);
+        figures[newPositionBoardIndex].position.updateInternalValues(newPositionBoardIndex);
+
+        return result;
     }
 
 }

@@ -31,12 +31,12 @@ public class Queen extends ChessPiece {
 
   @Override
   public boolean canMoveThisWay(Position newPosition) {
-    if (!board.wayIsClear(position, newPosition)) {
+    if (!(((this.position.file == newPosition.file && this.position.rank != newPosition.rank)
+        || (this.position.file != newPosition.file && this.position.rank == newPosition.rank))
+        || (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file)))) {
       return false;
     }
-    return (((this.position.file == newPosition.file && this.position.rank != newPosition.rank)
-        || (this.position.file != newPosition.file && this.position.rank == newPosition.rank))
-        || (Math.abs(this.position.rank - newPosition.rank) == Math.abs(this.position.file - newPosition.file)));
+    return board.wayIsClear(position, newPosition);
   }
 
 }
