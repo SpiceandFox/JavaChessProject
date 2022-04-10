@@ -9,6 +9,16 @@ public abstract class ChessPiece {
 
     public abstract ArrayList<Position> getAllPossibleMoves() throws InvalidMoveException, GameStateException;
 
+    public abstract boolean canMoveThisWay(Position newPosition);
+
+    /**
+     * Checks legality of the parameter move
+     * 
+     * @param newPosition
+     * @return boolean
+     * @throws InvalidMoveException
+     * @throws GameStateException
+     */
     protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
 
         if (!board.isInBounds(newPosition)) {
@@ -19,14 +29,13 @@ public abstract class ChessPiece {
             return false;
         }
 
-        if (!board.wayIsClear(position, newPosition)) {
-            return false;
+        if (!kingIsSafe()) {
+            if (!board.kingIsSafeOnNextTurn(this, newPosition)) {
+                return false;
+            }
         }
-        // if (!kingIsSafe()) {
-        // return false;
-        // }
 
-        return true;
+        return canMoveThisWay(newPosition);
     }
 
     public abstract char getName();
@@ -37,6 +46,16 @@ public abstract class ChessPiece {
         this.position = new Position(0, 0);
     }
 
+    /**
+     * returns a list of positions in a straigth line,
+     * can be diagonal
+     * 
+     * @param fileIncrement
+     * @param rankIncrement
+     * @return ArrayList<Position>
+     * @throws InvalidMoveException
+     * @throws GameStateException
+     */
     protected ArrayList<Position> getAllPositionsInLine(int fileIncrement, int rankIncrement)
             throws InvalidMoveException, GameStateException {
         ArrayList<Position> results = new ArrayList<>();
@@ -52,10 +71,22 @@ public abstract class ChessPiece {
         return results;
     }
 
-    protected ColorEnum getColor() {
+    /**
+     * returns color of piece
+     * 
+     * @return ColorEnum
+     */
+    public ColorEnum getColor() {
         return this.color;
     }
 
+    /**
+     * checks if the king of this color is safe
+     * 
+     * @return boolean
+     * @throws InvalidMoveException
+     * @throws GameStateException
+     */
     protected boolean kingIsSafe() throws InvalidMoveException, GameStateException {
         King king = board.getKing(color);
         return !king.isInDanger(king.position);

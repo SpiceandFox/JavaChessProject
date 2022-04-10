@@ -9,20 +9,7 @@
             "name": "Launch Main",
             "request": "launch",
             "mainClass": "ui.Main",
-            "projectName": "JavaChessProject_5a70f015"
-        },
-        {
-            "type": "java",
-            "name": "Launch Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "Launch Chess",
-            "request": "launch",
-            "mainClass": "Chess",
-            "projectName": "JavaChessProject_5a70f015"
+            "projectName": "JavaChessProject_a788aa36"
         }
     ]
 }

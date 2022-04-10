@@ -5,16 +5,22 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JTextArea;
+import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import chess.ChessBoard;
 import chess.ChessPiece;
 import chess.Position;
+import chess.WinException;
 
 public class GUI implements IUserInterface {
     private JFrame mainFrame = new JFrame();
@@ -26,9 +32,9 @@ public class GUI implements IUserInterface {
     // ChessBoardSection holds the chessboard and the surrounding rank/file
     // descriptors
     private JLayeredPane chessBoardSection;
-    // errorDisplaySection holds the Textoutput at the buttom of screen
+    // errorDisplaySection holds the Textoutput at the bottom of screen
     private JLayeredPane errorDisplaySection;
-    private JTextArea errorTextArea;
+    private JLabel errorTextArea;
     // moveDisplay shows last played moves at right side
     private JLayeredPane moveDisplaySection;
 
@@ -51,20 +57,24 @@ public class GUI implements IUserInterface {
 
     private void initErrorDisplaySection() {
         errorDisplaySection = new JLayeredPane();
+        errorDisplaySection.setLayout(new GridBagLayout());
         errorDisplaySection.setPreferredSize(new Dimension(400, 100));
         errorDisplaySection.setBackground(Color.ORANGE);
         errorDisplaySection.setOpaque(true);
         mainFrame.add(errorDisplaySection, BorderLayout.SOUTH);
         errorDisplaySection.setVisible(true);
 
-        errorTextArea = new JTextArea("Dies ist ein Test", 4, 20);
-        errorTextArea.setLayout(null);
-        errorTextArea.setEditable(false);
-        errorDisplaySection.setBackground(Color.LIGHT_GRAY);
+        errorTextArea = new JLabel();
+        errorDisplaySection.add(errorTextArea, new GridBagConstraints());
         errorTextArea.setOpaque(true);
-        errorTextArea.setPreferredSize(new Dimension(100, 80));
-        errorDisplaySection.add(errorTextArea, BorderLayout.CENTER);
         errorTextArea.setVisible(true);
+        errorTextArea.setText("");
+        errorTextArea.setFont(new Font("Arial", 0, 15));
+        errorTextArea.setBackground(Color.LIGHT_GRAY);
+        errorTextArea.setForeground(Color.BLACK);
+        errorTextArea.setSize(new Dimension(50, 50));
+        errorDisplaySection.moveToFront(errorTextArea);
+        errorDisplaySection.repaint();
 
     }
 
@@ -84,7 +94,8 @@ public class GUI implements IUserInterface {
         chessBoardSection.setBackground(Color.BLUE);
         chessBoardSection.setOpaque(true);
         mainFrame.add(chessBoardSection, BorderLayout.CENTER);
-        chessPanel = new ChessBoardPanel(400, Color.WHITE, Color.BLACK, chessPieceListener);
+        chessPanel = new ChessBoardPanel(400, new Color(239, 217, 181, 255), new Color(181, 136, 99, 255),
+                chessPieceListener);
         chessPanel.setPreferredSize(new Dimension(400, 400));
         chessBoardSection.add(chessPanel, new GridBagConstraints());
         chessBoardSection.setVisible(true);
@@ -106,7 +117,20 @@ public class GUI implements IUserInterface {
                         fromPosition = new Position(toPosition);
                     }
                     possibleMoves = activeChessPiece.getAllPossibleMoves();
-                    chessPanel.displayPossibleMoves(possibleMoves);
+                    if (activeChessPiece.getColor() == board.getCurrentPlayer()) {
+                        chessPanel.displayPossibleMoves(possibleMoves);
+                    }
+                } catch (WinException winException) {
+                    displayBoard();
+                    int userAnswer = JOptionPane.showConfirmDialog(chessBoardSection,
+                            winException.getMessage() + "\nDo you want to play again?", "Congratulations",
+                            JOptionPane.YES_NO_OPTION);
+                    if (userAnswer == 0) {
+                        board = new ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+                        setBoard(board);
+                        displayBoard();
+                    }
+
                 } catch (Exception exception) {
                     displayMessage(exception.getMessage());
                 }
@@ -121,12 +145,13 @@ public class GUI implements IUserInterface {
         for (int i = 0; i < pieces.length; i++) {
             chessPanel.setChessPiece(pieces[i].getName(), i);
         }
-
+        this.displayMessage(board.getCurrentPlayer() + " to play");
     }
 
     @Override
     public void displayMessage(String message) {
-        System.out.println(message);
+        errorTextArea.setText(message);
+        ;
 
     }
 

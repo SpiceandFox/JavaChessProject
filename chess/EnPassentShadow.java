@@ -3,8 +3,9 @@ package chess;
 import java.util.ArrayList;
 
 public class EnPassentShadow extends ChessPiece {
-    public EnPassentShadow(ChessBoard board) {
+    public EnPassentShadow(ChessBoard board, Position position) {
         super(ColorEnum.Empty, board);
+        this.position = position;
     }
 
     @Override
@@ -20,5 +21,10 @@ public class EnPassentShadow extends ChessPiece {
     @Override
     public char getName() {
         return ' ';
+    }
+
+    @Override
+    public boolean canMoveThisWay(Position newPosition) {
+        return false;
     }
 }

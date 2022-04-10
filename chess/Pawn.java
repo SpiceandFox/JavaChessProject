@@ -51,13 +51,16 @@ public class Pawn extends ChessPiece {
 	}
 
 	@Override
-	protected boolean isLegalMove(Position newPosition) throws InvalidMoveException, GameStateException {
-
-		// todo finish
-
-		if (!super.isLegalMove(newPosition)) {
-			return false;
+	public char getName() {
+		if (this.getColor() == ColorEnum.Black) {
+			return 'p';
 		}
+		return 'P';
+	}
+
+	@Override
+	public boolean canMoveThisWay(Position newPosition) {
+
 		int fileDelta = newPosition.file - this.position.file;
 		int rankDelta = newPosition.rank - this.position.rank;
 
@@ -101,15 +104,11 @@ public class Pawn extends ChessPiece {
 			return false;
 		}
 
-		return true;
-	}
-
-	@Override
-	public char getName() {
-		if (this.getColor() == ColorEnum.Black) {
-			return 'p';
+		if (!board.wayIsClear(position, newPosition)) {
+			return false;
 		}
-		return 'P';
+
+		return true;
 	}
 
 }
